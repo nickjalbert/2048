@@ -19,6 +19,26 @@ class AgentOS2048:
     UP = Direction.UP
     action_space = [RIGHT, DOWN, UP, LEFT]
 
+    def __init__(self, random_seed=None):
+        self.random_seed = random_seed
+        self.reset()
+
+    # self.board is a 1D list that represents the 2D board follows:
+    #       [
+    #           board[0]   board[1]   board[2]   board[3]
+    #           board[4]   board[5]   board[6]   board[7]
+    #           board[8]   board[9]  board[10]  board[11]
+    #          board[12]  board[13]  board[14]  board[15]
+    #       ]
+    #
+    # TODO: allow for boards of different dimensions
+    def reset(self):
+        self.set_board((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
+        self.add_new_random_number()
+        self.add_new_random_number()
+        self.score = 0
+        return self.board
+
     @classmethod
     def get_valid_actions_from_board(cls, board):
         test_game = cls()
@@ -35,7 +55,12 @@ class AgentOS2048:
         """Returns list of 3-tuples: [(action, reward, board),...]"""
         test_game = self.__class__()
         valid_actions = []
-        all_actions = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]
+        all_actions = [
+            Direction.UP,
+            Direction.DOWN,
+            Direction.LEFT,
+            Direction.RIGHT,
+        ]
         random.shuffle(all_actions)
         for action in all_actions:
             test_game.set_board(self.board)
@@ -58,26 +83,6 @@ class AgentOS2048:
             f"{j(p[8])} {j(p[9])} {j(p[10])} {j(p[11])}\n"
             f"{j(p[12])} {j(p[13])} {j(p[14])} {j(p[15])}\n\n"
         )
-
-
-
-
-
-# self.board is a 1D list that represents the 2D board follows:
-#       [
-#           board[0]   board[1]   board[2]   board[3]
-#           board[4]   board[5]   board[6]   board[7]
-#           board[8]   board[9]  board[10]  board[11]
-#          board[12]  board[13]  board[14]  board[15]
-#       ]
-#
-# TODO: allow for boards of different dimensions
-
-
-    def __init__(self, random_seed=None):
-
-        self.random_seed = random_seed
-        self.reset()
 
     @classmethod
     def get_canonical_afterstate(cls, board, action):
@@ -107,7 +112,9 @@ class AgentOS2048:
         xr90 = cls.rotate_board_right(xr0)
         xr180 = cls.rotate_board_right(xr90)
         xr270 = cls.rotate_board_right(xr180)
-        rotations_and_reflections = set([r0, r90, r180, r270, xr0, xr90, xr180, xr270])
+        rotations_and_reflections = set(
+            [r0, r90, r180, r270, xr0, xr90, xr180, xr270]
+        )
         # treat each board as a 16 digit number (where each digit is 0 to 2^17)
         # return the board that corresponds to the largest digit.
         for idx in range(16):
@@ -280,13 +287,6 @@ class AgentOS2048:
         board, new_score, done = self.get_state()
         return board, new_score - old_score, done, {}
 
-    def reset(self):
-        self.set_board((0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0))
-        self.add_new_random_number()
-        self.add_new_random_number()
-        self.score = 0
-        return self.board
-
     def reseed(self):
         if self.random_seed:
             random.seed(self.random_seed)
@@ -445,4 +445,3 @@ class AgentOS2048:
             )
         )
         self.score += r1 + r2 + r3 + r4
-

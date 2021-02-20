@@ -22,11 +22,16 @@ from shared import traverse_tracked_files
 
 returncode = 0
 
+IGNORE_FILES = ["squash_lookup_table.py"]
+
 
 def format_file(path):
     global returncode
     extension = os.path.splitext(path)[1]
     if extension != ".py":
+        return
+    if any(ignored in path for ignored in IGNORE_FILES):
+        print(f"====== Skipping {path} in IGNORE_FILES =======\n")
         return
     cmd = ["black", "--line-length=79", path]
     if len(sys.argv) > 1 and sys.argv[1] == "--check":

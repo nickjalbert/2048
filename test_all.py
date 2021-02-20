@@ -136,7 +136,9 @@ def test_get_valid_actions():
     for (a, r, b) in AgentOS2048.get_valid_actions_from_board(all_board):
         assert (a, r) in all_actions
     # No valid actions
-    no_board = tuple([2, 4, 8, 16, 32, 64, 128, 256, 2, 4, 8, 16, 32, 64, 128, 256])
+    no_board = tuple(
+        [2, 4, 8, 16, 32, 64, 128, 256, 2, 4, 8, 16, 32, 64, 128, 256]
+    )
     game.set_board(no_board)
     no_actions = [(a, r) for (a, r, b) in game.get_valid_actions()]
     assert game.board == no_board
@@ -160,7 +162,9 @@ def test_get_valid_actions_by_reward():
     board = tuple([2, 4, 4, 2, 2, 8, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     game = AgentOS2048()
     game.set_board(board)
-    action_rewards = [(a, r) for (a, r, b) in game.get_valid_actions_by_reward()]
+    action_rewards = [
+        (a, r) for (a, r, b) in game.get_valid_actions_by_reward()
+    ]
     assert game.board == board
     left_right = [(game.LEFT, 24), (game.RIGHT, 24)]
     up_down = [(game.UP, 4), (game.DOWN, 4)]
@@ -272,13 +276,19 @@ def test_get_afterstate():
     after_up, up_reward = AgentOS2048.get_afterstate(board, AgentOS2048.UP)
     assert after_up == (4, 4, 4, 16, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
     assert up_reward == 20
-    after_down, down_reward = AgentOS2048.get_afterstate(board, AgentOS2048.DOWN)
+    after_down, down_reward = AgentOS2048.get_afterstate(
+        board, AgentOS2048.DOWN
+    )
     assert after_down == (0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4, 4, 4, 16)
     assert down_reward == 20
-    after_left, left_reward = AgentOS2048.get_afterstate(board, AgentOS2048.LEFT)
+    after_left, left_reward = AgentOS2048.get_afterstate(
+        board, AgentOS2048.LEFT
+    )
     assert after_left == (2, 4, 8, 0, 2, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0)
     assert left_reward == 8
-    after_right, right_reward = AgentOS2048.get_afterstate(board, AgentOS2048.RIGHT)
+    after_right, right_reward = AgentOS2048.get_afterstate(
+        board, AgentOS2048.RIGHT
+    )
     assert after_right == (0, 2, 4, 8, 0, 0, 0, 2, 0, 0, 0, 8, 0, 0, 0, 8)
     assert right_reward == 8
 
