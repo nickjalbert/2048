@@ -19,8 +19,8 @@ class AgentOS2048:
     UP = Direction.UP
     action_space = [RIGHT, DOWN, UP, LEFT]
 
-    def __init__(self, random_seed=None):
-        self.random_seed = random_seed
+    def __init__(self, **kwargs):
+        self.random_seed = kwargs.get('random_seed', None)
         self.reset()
 
     # self.board is a 1D list that represents the 2D board follows:
@@ -68,6 +68,10 @@ class AgentOS2048:
             if board != self.board:
                 valid_actions.append((action, reward, board))
         return valid_actions
+
+    @property
+    def valid_actions(self):
+        return [a for a, r, b in self.get_valid_actions()]
 
     def get_valid_actions_by_reward(self):
         return sorted(self.get_valid_actions(), key=lambda x: -1 * x[1])
